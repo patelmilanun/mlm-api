@@ -1,4 +1,5 @@
 const express = require('express');
+const mongoose = require('mongoose');
 const helmet = require('helmet');
 const xss = require('xss-clean');
 const mongoSanitize = require('express-mongo-sanitize');
@@ -14,6 +15,7 @@ const routes = require('./routes/v1');
 const { errorConverter, errorHandler } = require('./middlewares/error');
 const ApiError = require('./utils/ApiError');
 const userService = require('./services/user.service');
+const logger = require('./config/logger');
 
 const app = express();
 
@@ -65,8 +67,9 @@ app.use(errorConverter);
 // handle error
 app.use(errorHandler);
 
-// create default super admin user if not exist
-const createIfNotExist = async () => {
+mongoose.connection.once('open', async () => {
+  // create default super admin user if not exist
+  logger.info('Creating super admin user if not exsist');
   const user = await userService.getUserByEmail('admin@inspireonics.com');
   if (!user) {
     // create the user
@@ -83,8 +86,6 @@ const createIfNotExist = async () => {
     });
     await createdUser.save();
   }
-};
-
-createIfNotExist();
+});
 
 module.exports = app;
