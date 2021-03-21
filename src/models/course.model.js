@@ -16,10 +16,12 @@ const courseSchema = mongoose.Schema(
     views: {
       type: Number,
       required: true,
+      default: 0,
     },
     duration: {
       type: Number,
       required: true,
+      default: 0,
     },
     // videos: [
     //   {
@@ -29,6 +31,7 @@ const courseSchema = mongoose.Schema(
     // ],
     createdBy: {
       type: mongoose.SchemaTypes.ObjectId,
+      required: true,
       ref: 'User',
     },
   },
