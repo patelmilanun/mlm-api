@@ -68,23 +68,25 @@ app.use(errorConverter);
 app.use(errorHandler);
 
 mongoose.connection.once('open', async () => {
-  // create default super admin user if not exist
-  logger.info('Creating super admin user if not exsist');
-  const user = await userService.getUserByEmail('admin@inspireonics.com');
-  if (!user) {
-    // create the user
-    const createdUser = await userService.createUser({
-      name: 'admin',
-      email: 'admin@inspireonics.com',
-      password: 'Inspireonics123@',
-      role: 'admin',
-      phoneNumber: '9981726547',
-      profileImageHash: 'admin',
-    });
-    Object.assign(createdUser, {
-      referedBy: createdUser.id,
-    });
-    await createdUser.save();
+  if (process.env.NODE_ENV !== 'test') {
+    // create default super admin user if not exist
+    logger.info('Creating super admin user if not exsist');
+    const user = await userService.getUserByEmail('admin@inspireonics.com');
+    if (!user) {
+      // create the user
+      const createdUser = await userService.createUser({
+        name: 'admin',
+        email: 'admin@inspireonics.com',
+        password: 'Inspireonics123@',
+        role: 'admin',
+        phoneNumber: '9981726547',
+        profileImageHash: 'admin',
+      });
+      Object.assign(createdUser, {
+        referedBy: createdUser.id,
+      });
+      await createdUser.save();
+    }
   }
 });
 
