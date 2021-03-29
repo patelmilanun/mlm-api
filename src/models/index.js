@@ -3,3 +3,4 @@ module.exports.User = require('./user.model');
 module.exports.Course = require('./course.model');
 module.exports.Video = require('./video.model');
 module.exports.UserStatus = require('./userStatus.model');
+module.exports.OrderStatus = require('./order.model');
