@@ -1,13 +1,15 @@
 const Joi = require('joi');
-const { password } = require('./custom.validation');
+const { password, objectId } = require('./custom.validation');
 
 const register = {
   body: Joi.object().keys({
     email: Joi.string().required().email(),
     password: Joi.string().required().custom(password),
     name: Joi.string().required(),
-    phoneNumber: Joi.string().required(),
-    referedBy: Joi.string(),
+    phoneNumber: Joi.string()
+      .required()
+      .regex(/^[6789]\d{9}$/),
+    referedBy: Joi.string().custom(objectId).allow(''),
   }),
 };
 
