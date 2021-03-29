@@ -54,6 +54,11 @@ const userSchema = mongoose.Schema(
         }
       },
     },
+    status: {
+      type: mongoose.SchemaTypes.ObjectId,
+      ref: 'UserStatus',
+      required: true,
+    },
     referedBy: {
       type: mongoose.SchemaTypes.ObjectId,
       ref: 'User',
