@@ -14,8 +14,9 @@ const { authLimiter } = require('./middlewares/rateLimiter');
 const routes = require('./routes/v1');
 const { errorConverter, errorHandler } = require('./middlewares/error');
 const ApiError = require('./utils/ApiError');
-const userService = require('./services/user.service');
+const { userService, statusService } = require('./services');
 const logger = require('./config/logger');
+const { statusTypes } = require('./config/statuses');
 
 const app = express();
 
@@ -86,6 +87,13 @@ mongoose.connection.once('open', async () => {
         referedBy: createdUser.id,
       });
       await createdUser.save();
+    }
+    const statuses = await statusService.getStatusByType(statusTypes.PAYMENT_PENDING);
+    if (!statuses) {
+      await statusService.createStatus({
+        statusType: statusTypes.PAYMENT_PENDING,
+        description: 'When user payment is pending after signup',
+      });
     }
   }
 });
