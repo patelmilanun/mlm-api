@@ -1,5 +1,5 @@
 const mongoose = require('mongoose');
-const { toJSON } = require('./plugins');
+const { toJSON, paginate } = require('./plugins');
 const { statusTypes } = require('../config/statuses');
 
 const userStatusSchema = mongoose.Schema(
@@ -21,6 +21,7 @@ const userStatusSchema = mongoose.Schema(
 
 // add plugin that converts mongoose to json
 userStatusSchema.plugin(toJSON);
+userStatusSchema.plugin(paginate);
 
 /**
  * @typedef UserStatus
