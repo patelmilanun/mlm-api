@@ -72,11 +72,18 @@ mongoose.connection.once('open', async () => {
   if (process.env.NODE_ENV !== 'test') {
     // create default super admin user if not exist
     logger.info('Creating super admin user if not exsist');
-    let status = await statusService.getStatusByType(statusTypes.PAYMENT_PENDING);
-    if (!status) {
-      status = await statusService.createStatus({
+    let statusPending = await statusService.getStatusByType(statusTypes.PAYMENT_PENDING);
+    if (!statusPending) {
+      statusPending = await statusService.createStatus({
         statusType: statusTypes.PAYMENT_PENDING,
         description: 'When user payment is pending after signup',
+      });
+    }
+    let statusCompleted = await statusService.getStatusByType(statusTypes.PAYMENT_COMPLETED);
+    if (!statusCompleted) {
+      statusCompleted = await statusService.createStatus({
+        statusType: statusTypes.PAYMENT_COMPLETED,
+        description: 'When user payment is completed after signup',
       });
     }
     const user = await userService.getUserByEmail('admin@inspireonics.com');
@@ -89,7 +96,7 @@ mongoose.connection.once('open', async () => {
         role: 'admin',
         phoneNumber: '9981726547',
         profileImageHash: 'admin',
-        status: status.id,
+        status: statusCompleted.id,
       });
       Object.assign(createdUser, {
         referedBy: createdUser.id,
