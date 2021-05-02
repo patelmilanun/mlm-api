@@ -31,6 +31,12 @@ const register = catchAsync(async (req, res) => {
   res.status(httpStatus.CREATED).send({ user, tokens, paymentLink: await generatePaymentLink(user, order) });
 });
 
+const registerPaymentStatus = catchAsync(async (req, res) => {
+  const { userId } = req.params;
+  const user = await userService.getUserById(userId);
+  res.status(httpStatus.CREATED).send({ paymentStatus: user.status.statusType });
+});
+
 const login = catchAsync(async (req, res) => {
   const { email, password } = req.body;
   const user = await authService.loginUserWithEmailAndPassword(email, password);
@@ -61,6 +67,7 @@ const resetPassword = catchAsync(async (req, res) => {
 
 module.exports = {
   register,
+  registerPaymentStatus,
   login,
   logout,
   refreshTokens,
