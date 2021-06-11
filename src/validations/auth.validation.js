@@ -13,7 +13,7 @@ const register = {
   }),
 };
 
-const registerPaymentStatus = {
+const getRegisterPaymentStatus = {
   params: Joi.object().keys({
     userId: Joi.string().custom(objectId),
   }),
@@ -55,7 +55,7 @@ const resetPassword = {
 
 module.exports = {
   register,
-  registerPaymentStatus,
+  getRegisterPaymentStatus,
   login,
   logout,
   refreshTokens,

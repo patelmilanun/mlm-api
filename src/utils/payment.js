@@ -10,8 +10,8 @@ const generatePaymentLink = async (userDetails, orderDetails) => {
     customerName: userDetails.name, // required
     customerPhone: userDetails.phoneNumber, // required
     customerEmail: userDetails.email, // required
-    returnUrl: 'https://example.com/return', // required
-    notifyUrl: 'https://example.com/notify',
+    returnUrl: `${process.env.SERVER_URL}/v1/auth/redirect-register-payment-status`, // required
+    notifyUrl: `${process.env.SERVER_URL}/v1/auth/register-payment-status`,
   });
   if (paymentLink.status === 'ERROR') {
     throw new ApiError(httpStatus.INTERNAL_SERVER_ERROR, 'Failed to generate payment link');

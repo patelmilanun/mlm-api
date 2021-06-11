@@ -1,4 +1,5 @@
 const httpStatus = require('http-status');
+const crypto = require('crypto');
 const ApiError = require('../utils/ApiError');
 const catchAsync = require('../utils/catchAsync');
 const { generatePaymentLink } = require('../utils/payment');
@@ -31,10 +32,42 @@ const register = catchAsync(async (req, res) => {
   res.status(httpStatus.CREATED).send({ user, tokens, paymentLink: await generatePaymentLink(user, order) });
 });
 
-const registerPaymentStatus = catchAsync(async (req, res) => {
+const getRegisterPaymentStatus = catchAsync(async (req, res) => {
   const { userId } = req.params;
   const user = await userService.getUserById(userId);
-  res.status(httpStatus.CREATED).send({ paymentStatus: user.status.statusType });
+  res.send({ paymentStatus: user.status.statusType });
+});
+
+const redirectRegisterPaymentStatus = catchAsync(async (req, res) => {
+  res.redirect(`${process.env.CLIENT_URL}/auth/register-payment-status`);
+});
+
+const updateRegisterPaymentStatus = catchAsync(async (req, res) => {
+  const { orderId, orderAmount, referenceId, txStatus, paymentMode, txMsg, txTime, signature } = req.params;
+
+  const signatureData = [orderId, orderAmount, referenceId, txStatus, paymentMode, txMsg, txTime].join();
+
+  const computedsignature = crypto
+    .createHmac('sha256', process.env.CASHFREE_SECRET_KEY)
+    .update(signatureData)
+    .digest('base64');
+
+  // console.log(computedsignature, signature);
+
+  if (computedsignature === signature) {
+    const tx = await orderService.updateOrderById(orderId, {
+      referenceId,
+      txStatus,
+      paymentMode,
+      txMsg,
+      txTime,
+    });
+    // console.log(tx.createdBy._id);
+    const statusCompleted = await statusService.getStatusByType(statusTypes.PAYMENT_COMPLETED);
+    await userService.updateUserById(tx.createdBy._id, { status: statusCompleted });
+  }
+
+  res.send();
 });
 
 const login = catchAsync(async (req, res) => {
@@ -67,7 +100,9 @@ const resetPassword = catchAsync(async (req, res) => {
 
 module.exports = {
   register,
-  registerPaymentStatus,
+  getRegisterPaymentStatus,
+  redirectRegisterPaymentStatus,
+  updateRegisterPaymentStatus,
   login,
   logout,
   refreshTokens,
