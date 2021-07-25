@@ -6,7 +6,7 @@ const userStatusSchema = mongoose.Schema(
   {
     statusType: {
       type: String,
-      enum: [statusTypes.PAYMENT_PENDING, statusTypes.PAYMENT_COMPLETED],
+      enum: [statusTypes.PAYMENT_PENDING, statusTypes.PAYMENT_COMPLETED, statusTypes.PAYMENT_FAILED],
       required: true,
     },
     description: {

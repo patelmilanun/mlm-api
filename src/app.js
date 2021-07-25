@@ -86,6 +86,13 @@ mongoose.connection.once('open', async () => {
         description: 'When user payment is completed after signup',
       });
     }
+    let statusFailed = await statusService.getStatusByType(statusTypes.PAYMENT_FAILED);
+    if (!statusFailed) {
+      statusFailed = await statusService.createStatus({
+        statusType: statusTypes.PAYMENT_FAILED,
+        description: 'When user payment is failed after signup',
+      });
+    }
     const user = await userService.getUserByEmail('admin@inspireonics.com');
     if (!user) {
       // create the user
