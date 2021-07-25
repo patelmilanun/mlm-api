@@ -27,6 +27,21 @@ const queryOrders = async (filter, options) => {
 };
 
 /**
+ * Query for orders
+ * @param {Object} filter - Mongo filter`
+ * @param {Object} options - Query options
+ * @param {string} [options.sortBy] - Sort option in the format: [-(for desc)]sortField
+ * @param {number} [options.limit] - Maximum number of results per page (default = 10)
+ * @returns {Promise<QueryResult>}
+ */
+const findOrders = async (filter, options) => {
+  const orders = await OrderStatus.find(filter)
+    .limit(options.limit ? options.limit : 10)
+    .sort(options.sortBy ? options.sortBy : '-createdAt');
+  return orders;
+};
+
+/**
  * Get order by id
  * @param {ObjectId} id
  * @returns {Promise<Order>}
@@ -68,6 +83,7 @@ const deleteOrderById = async (orderId) => {
 module.exports = {
   createOrder,
   queryOrders,
+  findOrders,
   getOrderById,
   updateOrderById,
   deleteOrderById,
