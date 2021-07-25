@@ -20,4 +20,15 @@ const generatePaymentLink = async (userDetails, orderDetails) => {
   return paymentLink.paymentLink;
 };
 
-module.exports = { generatePaymentLink };
+const getGeneratedPaymentLink = async (orderDetails) => {
+  const paymentLink = await pg.orders.getLink({
+    orderId: orderDetails.id, // required
+  });
+  if (paymentLink.status === 'ERROR') {
+    throw new ApiError(httpStatus.INTERNAL_SERVER_ERROR, 'Failed to generate payment link');
+  }
+
+  return paymentLink.paymentLink;
+};
+
+module.exports = { generatePaymentLink, getGeneratedPaymentLink };

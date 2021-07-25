@@ -13,6 +13,7 @@ router.get(
 );
 router.post('/register-payment-status', authController.updateRegisterPaymentStatus);
 router.post('/redirect-register-payment-status', authController.redirectRegisterPaymentStatus);
+router.get('/payment-link/:userId', validate(authValidation.getPaymentLink), authController.getPaymentLink);
 router.post('/login', validate(authValidation.login), authController.login);
 router.post('/logout', validate(authValidation.logout), authController.logout);
 router.post('/refresh-tokens', validate(authValidation.refreshTokens), authController.refreshTokens);
