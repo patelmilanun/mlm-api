@@ -16,6 +16,10 @@ const videoSchema = mongoose.Schema(
       type: String,
       trim: true,
     },
+    courseId: {
+      type: mongoose.SchemaTypes.ObjectId,
+      ref: 'Course',
+    },
   },
   {
     timestamps: true,

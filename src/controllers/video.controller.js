@@ -5,12 +5,12 @@ const catchAsync = require('../utils/catchAsync');
 const { videoService } = require('../services');
 
 const createVideo = catchAsync(async (req, res) => {
-  const video = await videoService.createVideo({ ...req.body, createdBy: req.user.id });
+  const video = await videoService.createVideo(req.body);
   res.status(httpStatus.CREATED).send(video);
 });
 
 const getVideos = catchAsync(async (req, res) => {
-  const filter = pick(req.query, ['title']);
+  const filter = pick(req.query, ['courseId']);
   const options = pick(req.query, ['sortBy', 'limit', 'page']);
   const result = await videoService.queryVideos(filter, options);
   res.send(result);

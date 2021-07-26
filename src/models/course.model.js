@@ -23,12 +23,12 @@ const courseSchema = mongoose.Schema(
       required: true,
       default: 0,
     },
-    // videos: [
-    //   {
-    //     type: mongoose.SchemaTypes.ObjectId,
-    //     ref: 'Video',
-    //   },
-    // ],
+    videos: [
+      {
+        type: mongoose.SchemaTypes.ObjectId,
+        ref: 'Video',
+      },
+    ],
     createdBy: {
       type: mongoose.SchemaTypes.ObjectId,
       required: true,

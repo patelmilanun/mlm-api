@@ -3,15 +3,16 @@ const { objectId } = require('./custom.validation');
 
 const createVideo = {
   body: Joi.object().keys({
-    title: Joi.string().required(),
-    description: Joi.string().required(),
-    // videos: Joi.array().items(Joi.custom(objectId)),
+    duration: Joi.number().integer().required(),
+    videoUrl: Joi.string().required(),
+    captionUrl: Joi.string(),
+    courseId: Joi.string().custom(objectId),
   }),
 };
 
 const getVideos = {
   query: Joi.object().keys({
-    title: Joi.string(),
+    courseId: Joi.string().custom(objectId),
     sortBy: Joi.string(),
     limit: Joi.number().integer(),
     page: Joi.number().integer(),
@@ -30,9 +31,10 @@ const updateVideo = {
   }),
   body: Joi.object()
     .keys({
-      title: Joi.string().required(),
-      description: Joi.string().required(),
-      // videos: Joi.array().items(Joi.custom(objectId)),
+      duration: Joi.number().integer(),
+      videoUrl: Joi.string(),
+      captionUrl: Joi.string(),
+      courseId: Joi.string().custom(objectId),
     })
     .min(1),
 };
