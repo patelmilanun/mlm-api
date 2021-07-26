@@ -5,13 +5,15 @@ const createCourse = {
   body: Joi.object().keys({
     title: Joi.string().required(),
     description: Joi.string().required(),
-    // videos: Joi.array().items(Joi.custom(objectId)),
+    thumbnail: Joi.string().uri().required(),
+    views: Joi.number().integer().required(),
+    duration: Joi.number().integer().required(),
+    videos: Joi.array().items(Joi.custom(objectId)),
   }),
 };
 
 const getCourses = {
   query: Joi.object().keys({
-    title: Joi.string(),
     sortBy: Joi.string(),
     limit: Joi.number().integer(),
     page: Joi.number().integer(),
@@ -30,9 +32,11 @@ const updateCourse = {
   }),
   body: Joi.object()
     .keys({
-      title: Joi.string().required(),
-      description: Joi.string().required(),
-      // videos: Joi.array().items(Joi.custom(objectId)),
+      title: Joi.string(),
+      description: Joi.string(),
+      views: Joi.number().integer(),
+      duration: Joi.number().integer(),
+      videos: Joi.array().items(Joi.custom(objectId)),
     })
     .min(1),
 };

@@ -13,6 +13,11 @@ const courseSchema = mongoose.Schema(
       required: true,
       trim: true,
     },
+    thumbnail: {
+      type: String,
+      required: true,
+      trim: true,
+    },
     views: {
       type: Number,
       required: true,
