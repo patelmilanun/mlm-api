@@ -4,7 +4,7 @@ const { objectId } = require('./custom.validation');
 const createVideo = {
   body: Joi.object().keys({
     duration: Joi.number().integer().required(),
-    videoUrl: Joi.string().required(),
+    videoUrl: Joi.string().uri().required(),
     captionUrl: Joi.string(),
     courseId: Joi.string().custom(objectId),
   }),
